@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descriptografia Assimétrica</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Descriptografia Assimétrica</h1>
+
+        <h2>Descriptografar Mensagem</h2>
+        <textarea id="encryptedInput" rows="4" placeholder="Cole o texto criptografado aqui..."></textarea>
+        <button onclick="decryptMessage()">Descriptografar</button>
+        
+        <h2>Mensagem Descriptografada</h2>
+        <input type="text" id="decryptedMessage" readonly placeholder="A mensagem descriptografada aparecerá aqui..." />
+
+        <p><a href="index.html">Página de criptografia</a></p>
+    </div>
+
+    <script>
+        function decryptMessage() {
+            const encryptedInput = document.getElementById("encryptedInput").value;
+            const encryptedMessage = forge.util.decode64(encryptedInput);
+
+            // Recuperar a chave privada do localStorage
+            const privateKey = localStorage.getItem("privateKey");
+
+            if (privateKey) {
+                const decrypted = forge.pki.privateKeyFromPem(privateKey).decrypt(encryptedMessage);
+                document.getElementById("decryptedMessage").value = decrypted;
+            } else {
+                document.getElementById("decryptedMessage").value = "Chave privada não encontrada!";
+            }
+        }
+    </script>
+</body>
+</html>

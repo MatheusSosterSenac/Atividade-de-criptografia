@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criptografia Assimétrica</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Criptografia Assimétrica</h1>
+
+        <h2>Criptografar Mensagem</h2>
+        <textarea id="message" rows="4" placeholder="Digite sua mensagem aqui..."></textarea>
+        <button onclick="encryptMessage()">Criptografar</button>
+        
+        <h2>Mensagem Criptografada</h2>
+        <input type="text" id="encryptedMessage" readonly placeholder="A mensagem criptografada aparecerá aqui..." />
+
+        <h2>Descriptografar Mensagem</h2>
+        <p><a href="decrypt.html">Página de descriptografia</a></p>
+    </div>
+
+    <script>
+        let publicKey, privateKey;
+
+        forge.pki.rsa.generateKeyPair({ bits: 2048, workers: 2 }, (err, keypair) => {
+            publicKey = forge.pki.publicKeyToPem(keypair.publicKey);
+            privateKey = forge.pki.privateKeyToPem(keypair.privateKey);
+        });
+
+        function encryptMessage() {
+            const message = document.getElementById("message").value;
+            const encrypted = forge.pki.publicKeyFromPem(publicKey).encrypt(message);
+            const encodedMessage = forge.util.encode64(encrypted);
+            document.getElementById("encryptedMessage").value = encodedMessage;
+
+            localStorage.setItem("privateKey", privateKey);
+        }
+    </script>
+</body>
+</html>
