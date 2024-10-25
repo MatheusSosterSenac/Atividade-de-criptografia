@@ -26,7 +26,6 @@
             const encryptedInput = document.getElementById("encryptedInput").value;
             const encryptedMessage = forge.util.decode64(encryptedInput);
 
-            // Recuperar a chave privada do localStorage
             const privateKey = localStorage.getItem("privateKey");
 
             if (privateKey) {
